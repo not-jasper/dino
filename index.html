@@ -45,6 +45,18 @@
     }
 </style>
 
+<style>
+    #cheat-panel {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 10px;
+        z-index: 1000;
+    }
+</style>
+
 <div id="cheat-panel">
     <label>
         <input type="checkbox" id="godMode"> God Mode (Invincibility)
@@ -59,46 +71,8 @@
     </label>
 </div>
 
-<div id="stats-area">
-    <p>Total Jumps: <span id="totalJumps">0</span></p>
-    <p>Highest Score: <span id="highestScore">0</span></p>
-</div>
-
 <script>
     (function() {
-        // Initialize stats from local storage or default values
-        var totalJumps = parseInt(localStorage.getItem('totalJumps')) || 0;
-        var highestScore = parseInt(localStorage.getItem('highestScore')) || 0;
-
-        // Update stats function
-        function updateStats() {
-            document.getElementById('totalJumps').textContent = totalJumps;
-            document.getElementById('highestScore').textContent = highestScore;
-        }
-
-        // Save stats function
-        function saveStats() {
-            localStorage.setItem('totalJumps', totalJumps.toString());
-            localStorage.setItem('highestScore', highestScore.toString());
-        }
-
-        // Update total jumps function
-        function updateTotalJumps() {
-            totalJumps++;
-            updateStats();
-            saveStats();
-        }
-
-        // Update highest score function
-        function updateHighestScore(newScore) {
-            if (newScore > highestScore) {
-                highestScore = newScore;
-                updateStats();
-                saveStats();
-            }
-        }
-
-        // Event listeners for cheats
         document.addEventListener('DOMContentLoaded', function() {
             var originalGameOver = Runner.prototype.gameOver;
 
@@ -120,29 +94,9 @@
             document.getElementById('jumpHeightControl').addEventListener('input', function(event) {
                 Runner.instance_.tRex.setJumpVelocity(parseFloat(event.target.value));
             });
-
-            // Event listener for jump events
-            Runner.instance_.tRex.onJump.add(function() {
-                updateTotalJumps();
-            });
-
-            // Event listener for score updates
-            Runner.instance_.distanceMeter.on('achievement', function(event) {
-                updateHighestScore(event.distance);
-            });
-
-            // Initial update of stats
-            updateStats();
-
-            // Prevent touch events from affecting the game
-            document.getElementById('cheat-panel').addEventListener('touchstart', function(event) {
-                event.stopPropagation();
-            });
         });
     })();
 </script>
-
-
 
 
 
