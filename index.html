@@ -72,7 +72,7 @@
 
             // Add Score
             document.getElementById('addScore').addEventListener('click', function() {
-                Runner.instance_.distanceRan += 1000; // Add 1000 to the score
+                Runner.instance_.distanceRan += 4000; // Add 4000 to the score
             });
 
             // Reset Score
@@ -89,6 +89,11 @@
                 }
             });
 
+            // Prevent touch events from affecting the game
+            document.getElementById('cheat-panel').addEventListener('touchstart', function(event) {
+                event.stopPropagation();
+            });
+
             var botInterval;
 
             function startBot() {
@@ -98,30 +103,19 @@
                     if (obstacles.length > 0) {
                         var obstacle = obstacles[0];
                         var distance = obstacle.xPos - tRex.xPos;
-                        if (distance < 60) {
-                            if (obstacle.yPos < 75) {
-                                tRex.setDuck(true); // Duck if obstacle is a bird
-                            } else {
-                                tRex.setDuck(false); // Stop ducking
-                                if (tRex.yPos === Runner.instance_.tRex.groundYPos) {
-                                    tRex.startJump(tRex.currentSpeed); // Jump if on ground
-                                }
-                            }
+                        if (distance < 60 && tRex.yPos === Runner.instance_.tRex.groundYPos) {
+                            tRex.startJump(tRex.currentSpeed);
                         }
-                    } else {
-                        tRex.setDuck(false); // Stop ducking if no obstacles
                     }
-                }, 50);
+                }, 25);
             }
 
             function stopBot() {
                 clearInterval(botInterval);
-                Runner.instance_.tRex.setDuck(false); // Ensure the T-Rex is not ducking
             }
         });
     })();
 </script>
-
 
 
 
