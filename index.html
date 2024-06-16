@@ -26,7 +26,15 @@
     </label>
     <br>
     <label>
-        Distance Ran: <input type="number" id="distanceRanControl" min="0" value="0">
+        Gravity: <input type="number" id="gravityControl" min="1" max="10" value="1">
+    </label>
+    <br>
+    <label>
+        Obstacle Frequency: <input type="number" id="obstacleFrequencyControl" min="1" max="10" value="5">
+    </label>
+    <br>
+    <label>
+        Obstacle Speed: <input type="number" id="obstacleSpeedControl" min="1" max="10" value="5">
     </label>
 </div>
 
@@ -58,14 +66,25 @@
                 }
             });
 
-            // Distance Ran Control (Set Score)
-            document.getElementById('distanceRanControl').addEventListener('keypress', function(event) {
+            // Gravity Control
+            document.getElementById('gravityControl').addEventListener('keypress', function(event) {
                 if (event.key === 'Enter') {
-                    var distance = parseFloat(event.target.value);
-                    var currentDistance = Runner.instance_.distanceMeter.getActualDistance();
-                    var distanceToAdd = distance - currentDistance;
-                    Runner.instance_.distanceMeter.setDistance(distance);
-                    Runner.instance_.distanceRan += distanceToAdd;
+                    Runner.instance_.tRex.config.GRAVITY = parseFloat(event.target.value);
+                }
+            });
+
+            // Obstacle Frequency Control
+            document.getElementById('obstacleFrequencyControl').addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    Runner.instance_.horizon.config.MIN_GAP_COEFFICIENT = parseFloat(event.target.value);
+                    Runner.instance_.horizon.config.MAX_GAP_COEFFICIENT = parseFloat(event.target.value);
+                }
+            });
+
+            // Obstacle Speed Control
+            document.getElementById('obstacleSpeedControl').addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    Runner.instance_.horizon.config.SPEED = parseFloat(event.target.value);
                 }
             });
 
@@ -76,7 +95,6 @@
         });
     })();
 </script>
-
 
 
 
