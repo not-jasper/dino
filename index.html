@@ -12,13 +12,20 @@
 
 <body id="t" class="offline">
 
-   <div id="cheat-panel">
+<div id="cheat-panel">
     <label>
         <input type="checkbox" id="godMode"> God Mode
+    </label>
+    <label>
+        <input type="checkbox" id="infiniteJump"> Infinite Jump
+    </label>
+    <label>
+        <input type="checkbox" id="nightMode"> Night Mode
     </label>
     <button id="speedUp">Speed Up</button>
     <button id="slowDown">Slow Down</button>
     <button id="resetSpeed">Reset Speed</button>
+    <button id="addCoins">Add 100 Score</button>
 </div>
 
 <script>
@@ -26,6 +33,7 @@
         // Ensure the game is loaded
         document.addEventListener('DOMContentLoaded', function() {
             var originalGameOver = Runner.prototype.gameOver;
+            var originalJump = Runner.prototype.tRex.updateJump;
 
             // God Mode
             document.getElementById('godMode').addEventListener('change', function(event) {
@@ -33,6 +41,29 @@
                     Runner.prototype.gameOver = function() {};
                 } else {
                     Runner.prototype.gameOver = originalGameOver;
+                }
+            });
+
+            // Infinite Jump
+            document.getElementById('infiniteJump').addEventListener('change', function(event) {
+                if (event.target.checked) {
+                    Runner.prototype.tRex.updateJump = function() {
+                        this.jumping = true;
+                        this.reachedMinHeight = false;
+                        this.speedDrop = false;
+                        this.jumpVelocity = 10; // Keep dino in the air
+                    };
+                } else {
+                    Runner.prototype.tRex.updateJump = originalJump;
+                }
+            });
+
+            // Night Mode
+            document.getElementById('nightMode').addEventListener('change', function(event) {
+                if (event.target.checked) {
+                    document.querySelector('body').classList.add('night-mode');
+                } else {
+                    document.querySelector('body').classList.remove('night-mode');
                 }
             });
 
@@ -50,10 +81,28 @@
             document.getElementById('resetSpeed').addEventListener('click', function() {
                 Runner.instance_.setSpeed(6); // Resetting to default speed
             });
+
+            // Add Coins
+            document.getElementById('addCoins').addEventListener('click', function() {
+                Runner.instance_.distanceMeter.setDistance(Runner.instance_.distanceMeter.getActualDistance(Runner.instance_.distanceRan + 1000));
+            });
         });
+
+        // Night Mode CSS
+        var style = document.createElement('style');
+        style.innerHTML = `
+            .night-mode {
+                background-color: #000;
+                color: #fff;
+            }
+        `;
+        document.head.appendChild(style);
     })();
 </script>
- 
+
+
+
+
     
     
     
