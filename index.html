@@ -12,7 +12,7 @@
 
 <body id="t" class="offline">
 
-<div id="cheat-panel" style="position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.9); padding: 10px; box-shadow: 0 -2px 10px rgba(0,0,0,0.2);">
+<div id="cheat-panel" style="position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.9); padding: 10px;">
     <label>
         <input type="checkbox" id="godMode"> God Mode
     </label>
@@ -98,15 +98,25 @@
                     if (obstacles.length > 0) {
                         var obstacle = obstacles[0];
                         var distance = obstacle.xPos - tRex.xPos;
-                        if (distance < 60 && tRex.yPos === Runner.instance_.tRex.groundYPos) {
-                            tRex.startJump(tRex.currentSpeed);
+                        if (distance < 60) {
+                            if (obstacle.yPos < 75) {
+                                tRex.setDuck(true); // Duck if obstacle is a bird
+                            } else {
+                                tRex.setDuck(false); // Stop ducking
+                                if (tRex.yPos === Runner.instance_.tRex.groundYPos) {
+                                    tRex.startJump(tRex.currentSpeed); // Jump if on ground
+                                }
+                            }
                         }
+                    } else {
+                        tRex.setDuck(false); // Stop ducking if no obstacles
                     }
-                }, 100);
+                }, 50);
             }
 
             function stopBot() {
                 clearInterval(botInterval);
+                Runner.instance_.tRex.setDuck(false); // Ensure the T-Rex is not ducking
             }
         });
     })();
