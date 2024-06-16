@@ -12,6 +12,17 @@
 
 <body id="t" class="offline">
 
+<style>
+    #stats-area {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 10px;
+        border: 1px solid #ccc;
+    }
+</style>
+
 <div id="cheat-panel" style="position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.9); padding: 10px; z-index: 1000;">
     <label>
         <input type="checkbox" id="godMode"> God Mode (Invincibility)
@@ -24,22 +35,46 @@
     <label>
         Jump Height: <input type="number" id="jumpHeightControl" min="10" max="50" value="10">
     </label>
-    <br>
-    <label>
-        Gravity: <input type="number" id="gravityControl" min="1" max="10" value="1">
-    </label>
-    <br>
-    <label>
-        Obstacle Frequency: <input type="number" id="obstacleFrequencyControl" min="1" max="10" value="5">
-    </label>
-    <br>
-    <label>
-        Obstacle Speed: <input type="number" id="obstacleSpeedControl" min="1" max="10" value="5">
-    </label>
+</div>
+
+<div id="stats-area">
+    <p>Total Jumps: <span id="totalJumps">0</span></p>
+    <p>Highest Score: <span id="highestScore">0</span></p>
 </div>
 
 <script>
     (function() {
+        // Initialize stats from local storage or default values
+        var totalJumps = parseInt(localStorage.getItem('totalJumps')) || 0;
+        var highestScore = parseInt(localStorage.getItem('highestScore')) || 0;
+
+        // Update stats area with initial values
+        document.getElementById('totalJumps').textContent = totalJumps;
+        document.getElementById('highestScore').textContent = highestScore;
+
+        // Save stats function
+        function saveStats() {
+            localStorage.setItem('totalJumps', totalJumps.toString());
+            localStorage.setItem('highestScore', highestScore.toString());
+        }
+
+        // Update total jumps function
+        function updateTotalJumps() {
+            totalJumps++;
+            document.getElementById('totalJumps').textContent = totalJumps;
+            saveStats();
+        }
+
+        // Update highest score function
+        function updateHighestScore(newScore) {
+            if (newScore > highestScore) {
+                highestScore = newScore;
+                document.getElementById('highestScore').textContent = highestScore;
+                saveStats();
+            }
+        }
+
+        // Event listeners for cheats
         document.addEventListener('DOMContentLoaded', function() {
             var originalGameOver = Runner.prototype.gameOver;
 
@@ -53,39 +88,23 @@
             });
 
             // Speed Control
-            document.getElementById('speedControl').addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    Runner.instance_.setSpeed(parseFloat(event.target.value));
-                }
+            document.getElementById('speedControl').addEventListener('input', function(event) {
+                Runner.instance_.setSpeed(parseFloat(event.target.value));
             });
 
             // Jump Height Control
-            document.getElementById('jumpHeightControl').addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    Runner.instance_.tRex.setJumpVelocity(parseFloat(event.target.value));
-                }
+            document.getElementById('jumpHeightControl').addEventListener('input', function(event) {
+                Runner.instance_.tRex.setJumpVelocity(parseFloat(event.target.value));
             });
 
-            // Gravity Control
-            document.getElementById('gravityControl').addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    Runner.instance_.tRex.config.GRAVITY = parseFloat(event.target.value);
-                }
+            // Event listener for jump events
+            Runner.instance_.tRex.onJump.add(function() {
+                updateTotalJumps();
             });
 
-            // Obstacle Frequency Control
-            document.getElementById('obstacleFrequencyControl').addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    Runner.instance_.horizon.config.MIN_GAP_COEFFICIENT = parseFloat(event.target.value);
-                    Runner.instance_.horizon.config.MAX_GAP_COEFFICIENT = parseFloat(event.target.value);
-                }
-            });
-
-            // Obstacle Speed Control
-            document.getElementById('obstacleSpeedControl').addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    Runner.instance_.horizon.config.SPEED = parseFloat(event.target.value);
-                }
+            // Event listener for score updates
+            Runner.instance_.distanceMeter.on('achievement', function(event) {
+                updateHighestScore(event.distance);
             });
 
             // Prevent touch events from affecting the game
@@ -95,9 +114,6 @@
         });
     })();
 </script>
-
-
-
 
 
     
