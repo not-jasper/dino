@@ -16,11 +16,14 @@
     <label>
         <input type="checkbox" id="godMode"> God Mode
     </label>
-    <button id="speedUp">Speed Up</button>
-    <button id="slowDown">Slow Down</button>
+    <label>
+        <input type="checkbox" id="highJump"> High Jump
+    </label>
+    <label>
+        Speed: <input type="range" id="speedControl" min="1" max="20" value="6">
+    </label>
     <button id="resetSpeed">Reset Speed</button>
     <button id="addScore">Add Score</button>
-    <button id="highJump">High Jump</button>
     <button id="resetScore">Reset Score</button>
 </div>
 
@@ -39,29 +42,29 @@
                 }
             });
 
-            // Speed Controls
-            document.getElementById('speedUp').addEventListener('click', function() {
-                Runner.instance_.setSpeed(Runner.instance_.currentSpeed + 2);
-            });
-
-            document.getElementById('slowDown').addEventListener('click', function() {
-                if (Runner.instance_.currentSpeed - 2 > 0) {
-                    Runner.instance_.setSpeed(Runner.instance_.currentSpeed - 2);
+            // High Jump
+            document.getElementById('highJump').addEventListener('change', function(event) {
+                if (event.target.checked) {
+                    Runner.instance_.tRex.setJumpVelocity(20); // Set high jump velocity
+                } else {
+                    Runner.instance_.tRex.setJumpVelocity(10); // Reset to normal jump velocity
                 }
             });
 
+            // Speed Control
+            document.getElementById('speedControl').addEventListener('input', function(event) {
+                Runner.instance_.setSpeed(parseFloat(event.target.value));
+            });
+
+            // Reset Speed
             document.getElementById('resetSpeed').addEventListener('click', function() {
+                document.getElementById('speedControl').value = 6; // Reset slider to default value
                 Runner.instance_.setSpeed(6); // Resetting to default speed
             });
 
             // Add Score
             document.getElementById('addScore').addEventListener('click', function() {
                 Runner.instance_.distanceRan += 1000; // Add 1000 to the score
-            });
-
-            // High Jump
-            document.getElementById('highJump').addEventListener('click', function() {
-                Runner.instance_.tRex.setJumpVelocity(20); // Set high jump velocity
             });
 
             // Reset Score
