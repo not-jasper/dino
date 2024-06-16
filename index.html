@@ -23,7 +23,29 @@
     }
 </style>
 
-<div id="cheat-panel" style="position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.9); padding: 10px; z-index: 1000;">
+<style>
+    #cheat-panel {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 10px;
+        z-index: 1000;
+    }
+
+    #stats-area {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 10px;
+        border: 1px solid #ccc;
+        z-index: 1001; /* Ensure stats area is above other elements */
+    }
+</style>
+
+<div id="cheat-panel">
     <label>
         <input type="checkbox" id="godMode"> God Mode (Invincibility)
     </label>
@@ -48,9 +70,11 @@
         var totalJumps = parseInt(localStorage.getItem('totalJumps')) || 0;
         var highestScore = parseInt(localStorage.getItem('highestScore')) || 0;
 
-        // Update stats area with initial values
-        document.getElementById('totalJumps').textContent = totalJumps;
-        document.getElementById('highestScore').textContent = highestScore;
+        // Update stats function
+        function updateStats() {
+            document.getElementById('totalJumps').textContent = totalJumps;
+            document.getElementById('highestScore').textContent = highestScore;
+        }
 
         // Save stats function
         function saveStats() {
@@ -61,7 +85,7 @@
         // Update total jumps function
         function updateTotalJumps() {
             totalJumps++;
-            document.getElementById('totalJumps').textContent = totalJumps;
+            updateStats();
             saveStats();
         }
 
@@ -69,7 +93,7 @@
         function updateHighestScore(newScore) {
             if (newScore > highestScore) {
                 highestScore = newScore;
-                document.getElementById('highestScore').textContent = highestScore;
+                updateStats();
                 saveStats();
             }
         }
@@ -107,6 +131,9 @@
                 updateHighestScore(event.distance);
             });
 
+            // Initial update of stats
+            updateStats();
+
             // Prevent touch events from affecting the game
             document.getElementById('cheat-panel').addEventListener('touchstart', function(event) {
                 event.stopPropagation();
@@ -116,6 +143,10 @@
 </script>
 
 
+
+
+
+    
     
     
     
