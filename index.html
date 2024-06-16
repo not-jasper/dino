@@ -49,86 +49,31 @@
             });
 
             // Speed Control
-            document.getElementById('speedControl').addEventListener('input', function(event) {
-                Runner.instance_.setSpeed(parseFloat(event.target.value));
-            });
-
-            // Velocity Control
-            document.getElementById('velocityControl').addEventListener('input', function(event) {
-                Runner.instance_.currentSpeed = parseFloat(event.target.value);
-            });
-
-            // Jump Height Control
-            document.getElementById('jumpHeightControl').addEventListener('input', function(event) {
-                Runner.instance_.tRex.setJumpVelocity(parseFloat(event.target.value));
-            });
-
-            // Set Score
-            document.getElementById('scoreControl').addEventListener('input', function(event) {
-                Runner.instance_.distanceMeter.setDistance(parseFloat(event.target.value));
-            });
-
-            // Prevent touch events from affecting the game
-            document.getElementById('cheat-panel').addEventListener('touchstart', function(event) {
-                event.stopPropagation();
-            });
-        });
-    })();
-</script>
-<div id="cheat-panel" style="position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.9); padding: 10px; z-index: 1000;">
-    <label>
-        <input type="checkbox" id="godMode"> God Mode
-    </label>
-    <br>
-    <label>
-        Speed: <input type="number" id="speedControl" min="1" max="20" value="6">
-    </label>
-    <br>
-    <label>
-        Velocity: <input type="number" id="velocityControl" min="5" max="50" value="10">
-    </label>
-    <br>
-    <label>
-        Jump Height: <input type="number" id="jumpHeightControl" min="10" max="50" value="10">
-    </label>
-    <br>
-    <label>
-        Set Score: <input type="number" id="scoreControl" min="0" value="0">
-    </label>
-</div>
-
-<script>
-    (function() {
-        document.addEventListener('DOMContentLoaded', function() {
-            var originalGameOver = Runner.prototype.gameOver;
-
-            // God Mode
-            document.getElementById('godMode').addEventListener('change', function(event) {
-                if (event.target.checked) {
-                    Runner.prototype.gameOver = function() {};
-                } else {
-                    Runner.prototype.gameOver = originalGameOver;
+            document.getElementById('speedControl').addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    Runner.instance_.setSpeed(parseFloat(event.target.value));
                 }
             });
 
-            // Speed Control
-            document.getElementById('speedControl').addEventListener('input', function(event) {
-                Runner.instance_.setSpeed(parseFloat(event.target.value));
-            });
-
             // Velocity Control
-            document.getElementById('velocityControl').addEventListener('input', function(event) {
-                Runner.instance_.currentSpeed = parseFloat(event.target.value);
+            document.getElementById('velocityControl').addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    Runner.instance_.currentSpeed = parseFloat(event.target.value);
+                }
             });
 
             // Jump Height Control
-            document.getElementById('jumpHeightControl').addEventListener('input', function(event) {
-                Runner.instance_.tRex.setJumpVelocity(parseFloat(event.target.value));
+            document.getElementById('jumpHeightControl').addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    Runner.instance_.tRex.setJumpVelocity(parseFloat(event.target.value));
+                }
             });
 
             // Set Score
-            document.getElementById('scoreControl').addEventListener('input', function(event) {
-                Runner.instance_.distanceMeter.setDistance(parseFloat(event.target.value));
+            document.getElementById('scoreControl').addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    Runner.instance_.distanceMeter.setDistance(parseFloat(event.target.value));
+                }
             });
 
             // Prevent touch events from affecting the game
@@ -141,6 +86,10 @@
 
 
 
+
+
+
+    
     
     
     
