@@ -12,7 +12,7 @@
 
 <body id="t" class="offline">
 
-<div id="cheat-panel" style="position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.9); padding: 10px;">
+<div id="cheat-panel" style="position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.9); padding: 10px; z-index: 1000;">
     <label>
         <input type="checkbox" id="godMode"> God Mode
     </label>
@@ -73,18 +73,20 @@
 
             // Add Score
             document.getElementById('addScore').addEventListener('click', function() {
-                Runner.instance_.distanceRan += 4000; // Add 4000 to the score
+                Runner.instance_.distanceMeter.setDistance(Runner.instance_.distanceMeter.getActualDistance() + 4000); // Add 4000 to the score
             });
 
             // Reset Score
             document.getElementById('resetScore').addEventListener('click', function() {
-                Runner.instance_.distanceRan = 0; // Reset the score to 0
+                Runner.instance_.distanceMeter.setDistance(0); // Reset the score to 0
             });
 
             // No Obstacles
             document.getElementById('noObstacles').addEventListener('change', function(event) {
                 if (event.target.checked) {
-                    Runner.instance_.horizon.update = function() {}; // Disable obstacles
+                    Runner.instance_.horizon.update = function() {
+                        this.runningTime += Runner.instance_.currentSpeed;
+                    }; // Disable obstacles
                 } else {
                     Runner.instance_.horizon.update = originalUpdate; // Restore original update method
                 }
