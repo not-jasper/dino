@@ -30,6 +30,10 @@
     <button id="addScore">Add Score</button>
     <br>
     <button id="resetScore">Reset Score</button>
+    <br>
+    <label>
+        <input type="checkbox" id="toggleObstacles"> Toggle Obstacles
+    </label>
 </div>
 
 <script>
@@ -76,9 +80,19 @@
             document.getElementById('resetScore').addEventListener('click', function() {
                 Runner.instance_.distanceRan = 0; // Reset the score to 0
             });
+
+            // Toggle Obstacles
+            document.getElementById('toggleObstacles').addEventListener('change', function(event) {
+                if (event.target.checked) {
+                    Runner.config.GAMEOVER_CLEAR_TIME = 999999999999999999; // Disable obstacles
+                } else {
+                    Runner.config.GAMEOVER_CLEAR_TIME = 750; // Reset to default value
+                }
+            });
         });
     })();
 </script>
+
 
 
 
